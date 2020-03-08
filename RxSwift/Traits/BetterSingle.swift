@@ -3,11 +3,9 @@ import Foundation
 public typealias BetterSingle<T, E: Error> = Single<Result<T, E>>
 
 extension BetterSingle {
-    public typealias BetterSingleObserver<E: Error> = (Result<Element, E>) -> Void
-    
-    public static func create<E>(subscribe: @escaping (@escaping BetterSingleObserver<E>) -> Disposable) -> BetterSingle<Element, E> {
-        let source = Observable<Result<Element, E>>.create { (observer: AnyObserver<Result<Element, E>>) in
-            return subscribe { (event: Result<Element, E>) in
+    public static func create<T, E>(subscribe: @escaping (@escaping (Result<T, E>) -> Void) -> Disposable) -> BetterSingle<T, E> {
+        let source = Observable<Result<T, E>>.create { (observer: AnyObserver<Result<T, E>>) in
+            return subscribe { (event: Result<T, E>) in
                 switch event {
                 case .success(_):
                     observer.on(.next(event))
@@ -18,18 +16,19 @@ extension BetterSingle {
             }
         }
         
-        return PrimitiveSequence<SingleTrait, Result<Element, E>>(raw: source)
+        return PrimitiveSequence<SingleTrait, Result<T, E>>(raw: source)
     }
     
-    public func subscribe<E>(_ observer: @escaping (Result<Element, E>) -> Void) -> Disposable {
+    public func subscribe<T, E: Error>(_ observer: @escaping (Result<T, E>) -> Void) -> Disposable where Element == Result<T, E> {
         var stopped = false
-        return self.primitiveSequence.asObservable().subscribe { event in
+        
+        return self.primitiveSequence.asObservable().subscribe { (event: Event<Result<T, E>>) in
             if stopped { return }
             stopped = true
             
             switch event {
             case .next(let element):
-                observer(.success(element))
+                observer(element)
             case .error(_):
                 rxFatalErrorInDebug("BetterSingles can't emit an error event")
             case .completed:
@@ -38,14 +37,14 @@ extension BetterSingle {
         }
     }
     
-    public func subscribe<E: Error>(onSuccess: ((Element) -> Void)? = nil, onError: ((E) -> Void)? = nil) -> Disposable {
+    public func subscribe<T, E: Error>(onSuccess: ((T) -> Void)? = nil, onError: ((E) -> Void)? = nil) -> Disposable where Element == Result<T, E> {
         #if DEBUG
              let callStack = Hooks.recordCallStackOnError ? Thread.callStackSymbols : []
         #else
             let callStack = [String]()
         #endif
     
-        return self.primitiveSequence.subscribe { (event: Result<Element, E>) in
+        return self.primitiveSequence.subscribe { (event: Result<T, E>) in
             switch event {
             case .success(let element):
                 onSuccess?(element)
