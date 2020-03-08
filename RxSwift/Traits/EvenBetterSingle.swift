@@ -28,7 +28,7 @@ extension PrimitiveSequenceType where Trait == BetterSingleTrait {
      - parameter subscribe: Implementation of the resulting observable sequence's `subscribe` method.
      - returns: The observable sequence with the specified implementation for the `subscribe` method.
      */
-    public static func create<E>(subscribe: @escaping (@escaping BetterSingleObserver<E>) -> Disposable) -> BetterSingle<Element, E> {
+    public static func create<E: Error>(subscribe: @escaping (@escaping BetterSingleObserver<E>) -> Disposable) -> BetterSingle<Element, E> {
         let source = Observable<Result<Element, E>>.create { observer in
             return subscribe { event in
                 switch event {
