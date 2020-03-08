@@ -48,6 +48,7 @@
 		6B9CA56F202A206B002C2D11 /* KeyPathBinder+RxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9CA56D202A1F96002C2D11 /* KeyPathBinder+RxTests.swift */; };
 		6B9CA570202A206C002C2D11 /* KeyPathBinder+RxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9CA56D202A1F96002C2D11 /* KeyPathBinder+RxTests.swift */; };
 		75B266B7241574B800527AFF /* BetterSingle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B266B6241574B800527AFF /* BetterSingle.swift */; };
+		75B266BC2415980900527AFF /* EvenBetterSingle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B266BB2415980900527AFF /* EvenBetterSingle.swift */; };
 		7EDBAEB41C89B1A6006CBE67 /* UITabBarItem+RxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDBAEAB1C89B1A5006CBE67 /* UITabBarItem+RxTests.swift */; };
 		7EDBAEBC1C89B9B7006CBE67 /* UITabBarItem+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDBAEB71C89B9B7006CBE67 /* UITabBarItem+Rx.swift */; };
 		7EDBAEC31C89BCB9006CBE67 /* UITabBarItem+RxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDBAEAB1C89B1A5006CBE67 /* UITabBarItem+RxTests.swift */; };
@@ -957,6 +958,7 @@
 		6B9CA568202A1F43002C2D11 /* KeyPathBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPathBinder.swift; sourceTree = "<group>"; };
 		6B9CA56D202A1F96002C2D11 /* KeyPathBinder+RxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyPathBinder+RxTests.swift"; sourceTree = "<group>"; };
 		75B266B6241574B800527AFF /* BetterSingle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterSingle.swift; sourceTree = "<group>"; };
+		75B266BB2415980900527AFF /* EvenBetterSingle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvenBetterSingle.swift; sourceTree = "<group>"; };
 		7EDBAEAB1C89B1A5006CBE67 /* UITabBarItem+RxTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITabBarItem+RxTests.swift"; sourceTree = "<group>"; };
 		7EDBAEB71C89B9B7006CBE67 /* UITabBarItem+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITabBarItem+Rx.swift"; sourceTree = "<group>"; };
 		7F600F3D1C5D0C0100535B1D /* UIRefreshControl+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Rx.swift"; sourceTree = "<group>"; };
@@ -1813,6 +1815,7 @@
 				C8A53ADF1F09178700490535 /* Completable+AndThen.swift */,
 				C801DE411F6EBB29008DB060 /* ObservableType+PrimitiveSequence.swift */,
 				75B266B6241574B800527AFF /* BetterSingle.swift */,
+				75B266BB2415980900527AFF /* EvenBetterSingle.swift */,
 			);
 			path = Traits;
 			sourceTree = "<group>";
@@ -3706,6 +3709,7 @@
 				C820A8701EB4DA5A00D431BC /* Merge.swift in Sources */,
 				C8093D951B8A72BE0088E94D /* OperationQueueScheduler.swift in Sources */,
 				C8093CDD1B8A72BE0088E94D /* DisposeBag.swift in Sources */,
+				75B266BC2415980900527AFF /* EvenBetterSingle.swift in Sources */,
 				C85217E91E3374970015DD38 /* GroupedObservable.swift in Sources */,
 				C820A93C1EB4DA5A00D431BC /* Zip+arity.swift in Sources */,
 				C8093D971B8A72BE0088E94D /* RecursiveScheduler.swift in Sources */,
