@@ -57,4 +57,8 @@ extension BetterSingle {
             }
         }
     }
+    
+    public func flatMap<Result, E: Error>(_ selector: @escaping (Element) throws -> BetterSingle<Result, E>) -> BetterSingle<Result, E> {
+        return BetterSingle<Result, E>(raw: self.primitiveSequence.source.flatMap(selector))
+    }
 }
