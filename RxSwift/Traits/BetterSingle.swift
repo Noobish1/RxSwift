@@ -60,6 +60,36 @@ extension BetterSingle where Trait == SingleTrait {
         }
     }
     
+    public func n1_do<T, E: Error>(
+        onSuccess: ((T) throws -> Void)? = nil,
+        afterSuccess: ((T) throws -> Void)? = nil,
+        onError: ((E) throws -> Void)? = nil,
+        afterError: ((E) throws -> Void)? = nil,
+        onSubscribe: (() -> Void)? = nil,
+        onSubscribed: (() -> Void)? = nil,
+        onDispose: (() -> Void)? = nil
+    ) -> Single<Element> where Element == Result<T, E> {
+        return self.do(
+            onSuccess: { result in
+                switch result {
+                    case .success(let value): try onSuccess?(value)
+                    case .failure(let error): try onError?(error)
+                }
+            },
+            afterSuccess: { result in
+                switch result {
+                    case .success(let value): try afterSuccess?(value)
+                    case .failure(let error): try afterError?(error)
+                }
+            },
+            onError: { _ in},
+            afterError: { _ in },
+            onSubscribe: onSubscribe,
+            onSubscribed: onSubscribed,
+            onDispose: onDispose
+        )
+    }
+    
     public func n1_flatMap<OtherValue, T, E: Error>(
         _ selector: @escaping (T) throws -> BetterSingle<OtherValue, E>
     ) -> BetterSingle<OtherValue, E> where Element == Result<T, E> {
