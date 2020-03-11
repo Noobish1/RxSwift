@@ -6,58 +6,36 @@ extension BetterSingle where Trait == SingleTrait {
     public static func n1_create<T, E: Error>(
         subscribe: @escaping (@escaping (Result<T, E>) -> Void) -> Disposable
     ) -> BetterSingle<T, E> where Element == Result<T, E> {
-        let source = Observable<Result<T, E>>.create { (observer: AnyObserver<Result<T, E>>) in
-            return subscribe { event in
-                switch event {
-                case .success(let value):
-                    observer.on(.next(.success(value)))
-                    observer.on(.completed)
-                case .failure(let error):
-                    observer.on(.error(error))
-                }
+        return self.create { (observer: @escaping (SingleEvent<Result<T, E>>) -> Void) -> Disposable in
+            return subscribe { result in
+                observer(.success(result))
             }
         }
-        
-        return PrimitiveSequence<SingleTrait, Result<T, E>>(raw: source)
     }
     
     public func n1_subscribe<T, E: Error>(_ observer: @escaping (Result<T, E>) -> Void) -> Disposable where Element == Result<T, E> {
-        var stopped = false
-        
-        return self.primitiveSequence.asObservable().subscribe { (event: Event<Result<T, E>>) in
-            if stopped { return }
-            stopped = true
-            
+        return self.subscribe { event in
             switch event {
-            case .next(let element):
-                observer(element)
-            case .error(_):
-                rxFatalErrorInDebug("BetterSingles can't emit an error event")
-            case .completed:
-                rxFatalErrorInDebug("BetterSingles can't emit a completion event")
+                case .success(let result):
+                    observer(result)
+                case .error(_):
+                    rxFatalErrorInDebug("BetterSingles shouldn't receive error events")
             }
         }
     }
     
     public func n1_subscribe<T, E: Error>(onSuccess: ((T) -> Void)? = nil, onError: ((E) -> Void)? = nil) -> Disposable where Element == Result<T, E> {
-        #if DEBUG
-             let callStack = Hooks.recordCallStackOnError ? Thread.callStackSymbols : []
-        #else
-            let callStack = [String]()
-        #endif
-    
-        return self.primitiveSequence.n1_subscribe { (event: Result<T, E>) in
-            switch event {
-            case .success(let element):
-                onSuccess?(element)
-            case .failure(let error):
-                if let onError = onError {
-                    onError(error)
-                } else {
-                    Hooks.defaultErrorHandler(callStack, error)
+        return self.subscribe(
+            onSuccess: { result in
+                switch result {
+                    case .success(let value): onSuccess?(value)
+                    case .failure(let error): onError?(error)
                 }
+            },
+            onError: { error in
+                rxFatalErrorInDebug("BetterSingles shouldn't receive error events")
             }
-        }
+        )
     }
     
     public func n1_do<T, E: Error>(
