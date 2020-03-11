@@ -78,4 +78,15 @@ extension BetterSingle where Trait == SingleTrait {
             }
         }
     }
+    
+    public func n1_mapError<OtherError: Error, T, E: Error>(
+        _ selector: @escaping (E) throws -> OtherError
+    ) -> BetterSingle<T, OtherError> where Element == Result<T, E> {
+        return self.map { result -> Result<T, OtherError> in
+            switch result {
+                case .success(let value): return .success(value)
+                case .failure(let error): return .failure(try selector(error))
+            }
+        }
+    }
 }
